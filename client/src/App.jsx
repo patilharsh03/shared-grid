@@ -8,6 +8,7 @@ function App() {
   const [cells, setCells] = useState([]);
   const [leaders, setLeaders] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const user = getUser();
 
@@ -16,6 +17,7 @@ function App() {
 
     socket.on("grid_state", (data) => {
       setCells(data);
+      setLoading(false);
     });
 
     socket.on("cell_updated", (updatedCell) => {
@@ -59,6 +61,20 @@ function App() {
       color: user.color,
     });
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-100">
+        <div className="text-center">
+          <div className="w-10 h-10 border-4 border-slate-300 border-t-slate-700 rounded-full animate-spin mx-auto mb-4" />
+
+          <p className="text-slate-600">
+            Waking up server...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 p-6">
